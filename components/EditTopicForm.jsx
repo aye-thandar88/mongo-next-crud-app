@@ -10,23 +10,27 @@ const EditTopicForm = ({ id, title, description }) => {
   const handleEditTopic = async (e) => {
     e.preventDefault();
 
-    try {
-      const res = await fetch(`http://localhost:3000/api/topics/${id}`, {
-        method: "PUT",
-        headers: {
-          "content-type": "application/json",
-        },
-        body: JSON.stringify({ newTitle, newDescription }),
-      });
+    if (!newTitle || !newDescription) {
+      alert("Title or description is required.");
+    } else {
+      try {
+        const res = await fetch(`http://localhost:3000/api/topics/${id}`, {
+          method: "PUT",
+          headers: {
+            "content-type": "application/json",
+          },
+          body: JSON.stringify({ newTitle, newDescription }),
+        });
 
-      if (!res.ok) {
-        throw new Error("Failed to update topic.");
+        if (!res.ok) {
+          throw new Error("Failed to update topic.");
+        }
+
+        router.refresh();
+        router.push("/");
+      } catch (error) {
+        console.log(error);
       }
-
-      router.refresh();
-      router.push("/");
-    } catch (error) {
-      console.log(error);
     }
   };
 

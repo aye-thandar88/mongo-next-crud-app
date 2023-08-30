@@ -13,24 +13,24 @@ const AddTopic = () => {
 
     if (!title || !description) {
       alert("Title or description is required.");
-    }
+    } else {
+      try {
+        const res = await fetch("http://localhost:3000/api/topics", {
+          method: "POST",
+          headers: {
+            "content-type": "application/json",
+          },
+          body: JSON.stringify({ title, description }),
+        });
 
-    try {
-      const res = await fetch("http://localhost:3000/api/topics", {
-        method: "POST",
-        headers: {
-          "content-type": "application/json",
-        },
-        body: JSON.stringify({ title, description }),
-      });
-
-      if (!res.ok) {
-        throw new Error("Failed to create a topic.");
+        if (!res.ok) {
+          throw new Error("Failed to create a topic.");
+        }
+        router.push("/");
+        router.refresh();
+      } catch (error) {
+        console.log(error);
       }
-      router.push("/");
-      router.refresh();
-    } catch (error) {
-      console.log(error);
     }
   };
 
